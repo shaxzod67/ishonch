@@ -1,3 +1,5 @@
+import './royhat.css'
+
 
 const Royhat = () => {
   const handleSubmit = (event) => {
@@ -14,32 +16,33 @@ const Royhat = () => {
     <div>
         <form method="post" autoComplete="off" name="google-sheet" onSubmit={handleSubmit}>
       <center><br /><br />
-        <h1>Registration Form</h1><br />
-        <table border="5">
+        <h1 >Registration Form</h1><br />
+        <table className='table'>
           <tbody>
             <tr>
-              <td><b>Name : </b></td>
-              <td><input type="text" name="Name" required /></td>
+              <td><b>Ism : </b></td>
+              <td><input type="text" name="Ism" required /></td>
             </tr>
             <tr>
-              <td><b>Email : </b></td>
-              <td><input type="text" name="Email" required /></td>
+              <td><b>Familya : </b></td>
+              <td><input type="text" name="Familya" required /></td>
             </tr>
             <tr>
-              <td><b>Phone no. : </b></td>
-              <td><input type="number" name="Phone" required /></td>
+              <td><b>Telfon nomer : </b></td>
+              <td><input type="number" name="Telfon" required /></td>
             </tr>
             <tr>
-              <td><b>Gender : </b></td>
+              <td><b>Fan : </b></td>
               <td>
-                <input type="radio" name="Gender" value="Kimyo" />Kimyo
-                <input type="radio" name="Gender" value="Biologiya" />Biologiya
+                <input type="radio" name="Fan" value="Kimyo" />Kimyo
+                <input type="radio" name="Fan" value="Biologiya" />Biologiya
+                <input type="radio" name="Fan" value="Matematika" />Matematika
               </td>
             </tr>
           </tbody>
         </table>
         <br /><br />
-        <input type="submit" name="submit" value="Submit" />
+        <button type="submit" name="submit" value="Submit" >Goo</button>
       </center>
     </form>
     </div>
