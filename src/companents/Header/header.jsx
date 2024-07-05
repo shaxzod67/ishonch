@@ -1,37 +1,64 @@
-import React from 'react'
-import ishonchpng from '../../img/Ishonch.png'
-import { Link, NavLink, Route, Routes } from 'react-router-dom'
-import { Natija } from '../Natija/natija'
-import { Signup } from '../Kirish/signUp'
-import { Login } from '../Kirish/signIn'
-import { FaUserPlus } from "react-icons/fa";
-import { FaRegUserCircle } from "react-icons/fa";
+import React, { useContext } from 'react';
+import { Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
+import { FaUserPlus, FaRegUserCircle } from 'react-icons/fa';
+import { BiExit } from 'react-icons/bi';
+import ishonchpng from '../../img/Ishonch.png';
+import { Natija } from '../Natija/natija';
+import { Signup } from '../Kirish/signUp';
+import { Login } from '../Kirish/signIn';
+import { auth } from '../../firebase';
+import { signOut } from 'firebase/auth';
+import { AuthContext } from '../../contex/AuthContext';
+import Royhat from '../Royhat/Royhat'
+const Header = () => {
+    const navigate = useNavigate();
+    const { dispatch } = useContext(AuthContext);
+    const token = localStorage.getItem('user');
 
-export const Header = () => {
+    const handleSignOut = () => {
+        signOut(auth)
+            .then(() => {
+                dispatch({ type: 'LOGOUT' });
+                navigate('/signin');
+            })
+            .catch((error) => {
+                console.error('Sign out error:', error);
+            });
+    };
+
     return (
         <div>
             <header className="text-gray-400 bg-gray-900 body-font">
-                <div  className='navbar'>
-                    <a className="flex title-font font-medium items-center text-white mb-4 md:mb-0">
+                <div className="navbar">
+                    <Link to="/" className="flex title-font font-medium items-center text-white mb-4 md:mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                         </svg>
                         <span className="ml-3 text-xl">Ishonch</span>
-                    </a>
+                    </Link>
                     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-
-                        <button className='signup'> <FaUserPlus />
-                            <NavLink className="mr-5 hover:text-white" to='/signup'>SignUp</NavLink>
-                        </button>
-                        <button className='signin'>
-                            <FaRegUserCircle />
-                            <NavLink className="mr-5 hover:text-white" to='/signin'>SignIn</NavLink>
-                        </button>
-                    <button className="inline-flex items-center bg-green-500 border-0 py-1 px-3 focus:outline-none hover:bg-green-400 rounded text-base mt-4 md:mt-0 text-white"><Link to='/natija'>Natija</Link>
-                        <svg fill="none" stroke="currentColor" sstrokeLinejoin="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                            <path d="M5 12h14M12 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
+                        {!token ? (
+                            <div className='sign'>
+                                <button className="signup">
+                                    <FaUserPlus />
+                                    <NavLink className="hover:text-white ml-1" to="/signup">SignUp</NavLink>
+                                </button>
+                                <button className="signin">
+                                    <FaRegUserCircle />
+                                    <NavLink className="hover:text-white ml-1" to="/signin">SignIn</NavLink>
+                                </button>
+                            </div>
+                        ) : (
+                            < div className='sign'>
+                                <button className="signin">
+                                    <Link target="_blank" to="/natija">Natija</Link>
+                                </button>
+                                <button onClick={handleSignOut} className="signup">
+                                    <BiExit />
+                                    <span className="ml-1">Chiqish</span>
+                                </button>
+                            </div>
+                        )}
                     </nav>
                 </div>
             </header>
@@ -46,20 +73,14 @@ export const Header = () => {
                         </h1>
                         <p className="mb-8 leading-relaxed">Copper mug try-hard pitchfork pour-over freegan heirloom neutra air plant cold-pressed tacos poke beard tote bag. Heirloom echo park mlkshk tote bag selvage hot chicken authentic tumeric truffaut hexagon try-hard chambray.</p>
                         <div className="flex justify-center">
-                            <button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Ro'yhatdan o'tish</button>
+                            <button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg"><Link target='_blank' to="/royhat">Ro'yhatdan o'tish</Link></button>
                         </div>
                     </div>
                 </div>
             </section>
-            {
-                <Routes>
-                    <Route element={<Natija />} path='/natija' />
-                    <Route element={<Signup />} path='/signup' />
-                    <Route element={<Login />} path='/signin' />
-                </Routes>
-            }
+
         </div>
-    )
+    );
+};
 
-}
-
+export default Header;
